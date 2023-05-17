@@ -805,10 +805,11 @@ class GUI:
         else:
             self.camera_status = "Not Respond"
 
-        if self.spectro_manager.check_spectro_connected():
-            self.spectro_status = "OK"
-        else:
-            self.spectro_status = "Not Respond"
+        # TODO  a vérifier
+        #if self.spectro_manager.check_spectro_connected():
+        #    self.spectro_status = "OK"
+        #else:
+        #    self.spectro_status = "Not Respond"
 
 
     def read_from_turntable(self, btn):

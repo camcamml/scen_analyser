@@ -42,7 +42,46 @@ class db_manager:
             lst.append(dico)
         return lst
 
+    ############# Type of Word #################################
+    def add_new_typew(self, typew_name, typew_description=''):
+        """ ADD CATEGORIE """
+        type_of_word_obj = models.Type_of_word()
+        type_of_word_obj.typew_name = typew_name
+        type_of_word_obj.typew_description = typew_description
+        self.session.add(type_of_word_obj)
+        self.session.commit()
 
+    def get_list_ypew(self):
+        """ UPDATE COLOR """
+        type_of_word_res = self.session.query(models.Type_of_word).all()
+        lst = []
+        for e in type_of_word_res:
+            dico = list()
+            dico.append(e.typew_name)
+            dico.append(e.typew_description)
+            lst.append(dico)
+        return lst
+    
+    ############# Synset #################################
+    def add_new_synset(self, synset_num, synset_description=''):
+        """ ADD CATEGORIE """
+        synset_obj = models.Synset()
+        synset_obj.synset_num = synset_num
+        synset_obj.synset_description = synset_description
+        self.session.add(synset_obj)
+        self.session.commit()
+
+    def get_list_synset(self):
+        """ UPDATE COLOR """
+        synset_res = self.session.query(models.Synset).all()
+        lst = []
+        for e in synset_res:
+            dico = list()
+            dico.append(e.synset_num)
+            dico.append(e.synset_description)
+            lst.append(dico)
+        return lst
+    
 
     ############# CATEGORIE #################################
     def add_new_categorie(self, cat_name, cat_description=''):
@@ -274,7 +313,9 @@ class db_manager:
         ).filter(models.Object.obj_id == obj_id).one()
         res = {}
         for o in obj:
-            res = res | o.as_dict()
+            #res = res | o.as_dict()
+            res = res.copy()
+            res.update(o.as_dict())
         return res
 
     def get_list_all_object(self):
