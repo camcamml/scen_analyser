@@ -42,45 +42,47 @@ class db_manager:
             lst.append(dico)
         return lst
 
-    ############# Type of Word #################################
-    def add_new_typew(self, typew_name, typew_description=''):
-        """ ADD CATEGORIE """
-        type_of_word_obj = models.Type_of_word()
-        type_of_word_obj.typew_name = typew_name
-        type_of_word_obj.typew_description = typew_description
-        self.session.add(type_of_word_obj)
-        self.session.commit()
+    # ############# Word #################################
+    # def add_new_word(self, word_name, word_description='', type_of_word='n'):
+    #     """ ADD WORD """
+    #     word_obj = models.Word()
+    #     word_obj.word_name = word_name
+    #     word_obj.word_description = word_description
+    #     word_obj.type_of_word = type_of_word
+    #     self.session.add(word_obj)
+    #     self.session.commit()
 
-    def get_list_ypew(self):
-        """ UPDATE COLOR """
-        type_of_word_res = self.session.query(models.Type_of_word).all()
-        lst = []
-        for e in type_of_word_res:
-            dico = list()
-            dico.append(e.typew_name)
-            dico.append(e.typew_description)
-            lst.append(dico)
-        return lst
+    # def get_list_word(self):
+    #     """ UPDATE WORD """
+    #     word_res = self.session.query(models.Word).all()
+    #     lst = []
+    #     for e in word_res:
+    #         dico = list()
+    #         dico.append(e.word_name)
+    #         dico.append(e.word_description)
+    #         dico.append(e.type_of_word)
+    #         lst.append(dico)
+    #     return lst
     
-    ############# Synset #################################
-    def add_new_synset(self, synset_num, synset_description=''):
-        """ ADD CATEGORIE """
-        synset_obj = models.Synset()
-        synset_obj.synset_num = synset_num
-        synset_obj.synset_description = synset_description
-        self.session.add(synset_obj)
-        self.session.commit()
+    # ############# Synset #################################
+    # def add_new_synset(self, synset_num, synset_description=''):
+    #     """ ADD SYNSET """
+    #     synset_obj = models.Synset()
+    #     synset_obj.synset_num = synset_num
+    #     synset_obj.synset_description = synset_description
+    #     self.session.add(synset_obj)
+    #     self.session.commit()
 
-    def get_list_synset(self):
-        """ UPDATE COLOR """
-        synset_res = self.session.query(models.Synset).all()
-        lst = []
-        for e in synset_res:
-            dico = list()
-            dico.append(e.synset_num)
-            dico.append(e.synset_description)
-            lst.append(dico)
-        return lst
+    # def get_list_synset(self):
+    #     """ UPDATE SYNSET """
+    #     synset_res = self.session.query(models.Synset).all()
+    #     lst = []
+    #     for e in synset_res:
+    #         dico = list()
+    #         dico.append(e.synset_num)
+    #         dico.append(e.synset_description)
+    #         lst.append(dico)
+    #     return lst
     
 
     ############# CATEGORIE #################################
@@ -224,6 +226,27 @@ class db_manager:
             dico.append(e.shp_description)
             lst.append(dico)
         return lst
+    
+
+    # ############# Type of word #################################
+    # def add_new_type_of_word(self, shn_name, shn_description=''): 
+    #     """ ADD SHINE """
+    #     shane_obj = models.Shine()
+    #     shane_obj.shn_name = shn_name
+    #     shane_obj.shn_description = shn_description
+    #     self.session.add(shane_obj)
+    #     self.session.commit()
+
+    # def get_list_type_of_word(self):
+    #     """ UPDATE SHINE """
+    #     shane_res = self.session.query(models.Shine).all()
+    #     lst = []
+    #     for e in shane_res:
+    #         dico = list()
+    #         dico.append(e.shn_name)
+    #         dico.append(e.shn_description)
+    #         lst.append(dico)
+    #     return lst
 
     ############# SHINE #################################
     def add_new_shine(self, shn_name, shn_description=''):
@@ -348,12 +371,18 @@ class db_manager:
 
     def add_new_object(self, properties):
         obj = models.Object()
+        obj.obj_wordnet_word = properties['obj_wordnet_word']
+        obj.obj_wordnet_synset = properties['obj_wordnet_synset']
+        #obj.obj_wordnet_type_of_word = properties['cmbx_obj_type_of_word']
+        
         obj.obj_real_name = properties['obj_real_name']
         obj.obj_real_description = properties['obj_real_description']
         #obj.obj_date_create = properties['obj_date_create']
+
         obj.obj_size_length_x = properties['obj_size_length_x']
         obj.obj_size_width_y = properties['obj_size_width_y']
         obj.obj_size_height_z = properties['obj_size_height_z']
+
         obj.obj_shine = properties['obj_shine']
         obj.obj_filling = properties['obj_filling']
         obj.obj_roughness = properties['obj_roughness']
@@ -374,12 +403,19 @@ class db_manager:
 
     def update_object(self, properties):
         obj = self.session.query(models.Object).filter(models.Object.obj_id == properties['obj_id']).one()
+
+        obj.obj_wordnet_word = properties['obj_wordnet_word']
+        obj.obj_wordnet_synset = properties['obj_wordnet_synset']
+        #obj.obj_wordnet_type_of_word = properties['cmbx_obj_type_of_word']
+
         obj.obj_real_name = properties['obj_real_name']
         obj.obj_real_description = properties['obj_real_description']
         # obj.obj_date_create = properties['obj_date_create']
+
         obj.obj_size_length_x = properties['obj_size_length_x']
         obj.obj_size_width_y = properties['obj_size_width_y']
         obj.obj_size_height_z = properties['obj_size_height_z']
+
         obj.obj_shine = properties['obj_shine']
         obj.obj_filling = properties['obj_filling']
         obj.obj_roughness = properties['obj_roughness']

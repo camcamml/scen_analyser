@@ -303,6 +303,16 @@ class GUI:
 
 
     def upload_all_fildes(self):
+        # Wordnet_word
+        obj_wordnet_word = self.builder.get_object('obj_wordnet_word')
+        obj_wordnet_word.set_text(self.selected_object_prop["obj_wordnet_word"])
+        # Wordnet_synset
+        obj_wordnet_synset = self.builder.get_object('obj_wordnet_synset')
+        obj_wordnet_synset.set_text(str(self.selected_object_prop["obj_wordnet_synset"]))
+
+        #obj_wordnet_type_of_word = self.builder.get_object('cmbx_obj_type_of_word')
+        #obj_wordnet_type_of_word.set_text(self.selected_object_prop["cmbx_obj_type_of_word"])
+
         # RealName
         obj_real_name = self.builder.get_object('obj_real_name')
         obj_real_name.set_text(self.selected_object_prop["obj_real_name"])
@@ -325,6 +335,7 @@ class GUI:
         # load combobox
         obj_shine = self.builder.get_object('obj_size_z')
 
+        #self.load_cmbx('cmbx_obj_type_of_word', self.scan_object.get_list_type_of_word(), 'cmbx_obj_type_of_word')
         self.load_cmbx('cmbx_obj_shine', self.scan_object.get_list_shine(), 'obj_shine')
         self.load_cmbx('cmbx_obj_filling', self.scan_object.get_list_filling(), 'obj_filling')
         self.load_cmbx('cmbx_obj_moveable', self.scan_object.get_list_movable(), 'obj_mov_name')
@@ -376,6 +387,12 @@ class GUI:
             self.refresh_all_components()
 
     def update_properties_of_current_object(self):
+        obj_wordnet_word = self.builder.get_object('obj_wordnet_word').get_text()
+        self.scan_object.set_properties_value('obj_wordnet_word', obj_wordnet_word)
+
+        obj_wordnet_synset = self.builder.get_object('obj_wordnet_synset').get_text()
+        self.scan_object.set_properties_value('obj_wordnet_synset', obj_wordnet_synset)
+
         obj_real_name = self.builder.get_object('obj_real_name').get_text()
         self.scan_object.set_properties_value('obj_real_name', obj_real_name)
 

@@ -81,6 +81,16 @@ class Scan_object:
         return
 
 
+    def add_type_of_word(self, properties):
+        """ add type_of_word"""
+        self.db_manager.add_new_type_of_word(properties);
+        return
+
+    def get_list_type_of_word(self):
+        lst = self.db_manager.get_list_type_of_word()
+        return lst
+
+
 
     def get_list_categories(self):
         """ get list of colors """

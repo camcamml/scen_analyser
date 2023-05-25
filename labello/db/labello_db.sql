@@ -58,6 +58,10 @@ CREATE TABLE parameters(
 
 CREATE TABLE object(
    obj_id INT AUTO_INCREMENT,
+   obj_wordnet_word VARCHAR(64),
+   obj_wordnet_synset INT,
+   obj_wordnet_type_of_word VARCHAR(8),
+   
    obj_real_name VARCHAR(255),
    obj_real_description VARCHAR(255),
    obj_date_create DATETIME,

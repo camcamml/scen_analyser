@@ -2,6 +2,7 @@ from nltk.corpus import wordnet as wn
 import matplotlib
 import networkx as nx
 
+
 def travers(graph, start, node):
     graph.depth[node.name()] = node.shortest_path_distance(start)
     for child in node.hyponyms():
@@ -21,5 +22,15 @@ def graph_draw(graph):
 
 
 computer = wn.synset('book.n.02')
+test_word = wn.synset('shoe.n.01')
 graph = hyponym_graph(computer)
-graph_draw(graph)
+print(computer.definition())
+print(test_word.definition())
+#graph_draw(graph)
+
+'''
+Identification d'un mot via NLTK Wordnet
+
+"mot".type.synsets_nb.lemmas
+
+'''

@@ -16,7 +16,6 @@ class Categorie(Base):
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
-
 class SubCategorie(Base):
     __tablename__ = 'subcategorie'
     scat_name = Column(String(255), primary_key=True)
@@ -26,7 +25,6 @@ class SubCategorie(Base):
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
-
 
 class ObjectName(Base):
     __tablename__ = 'object_name'
@@ -40,34 +38,26 @@ class ObjectName(Base):
 
 
 ### Identification NLTK Wordnet ###
-class Word(Base):
-    __tablename__ = 'word'
-    word_name = Column(String(255), primary_key=True)
-    word_description = Column(String(255))
+#class Word(Base):
+#    __tablename__ = 'word'
+#    word_name = Column(String(255), primary_key=True)
+#    word_description = Column(String(255))
+#    type_of_word = Column(String(255))
+#
+#    def as_dict(self):
+#        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
-    def as_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
-    
-class Type_of_word(Base):
-    __tablename__ = 'type_of_word'
-    typew_name = Column(String(255), primary_key=True)
-    typew_description = Column(String(255))
-    typew_word_name = Column(String(255), ForeignKey("word.word_name"))
-    relationship("word")
-
-    def as_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
-
-class Synset(Base):
-    __tablename__ = 'synset'
-    synset_num = Column(Integer(), primary_key=True)
-    synset_description = Column(String(255))
-    synset_typew_name = Column(String(255), ForeignKey("type_of_word.typew_name"))
-    relationship("type_of_word")
-
-    def as_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+#class Synset(Base):
+#    __tablename__ = 'synset'
+#    synset_num = Column(Integer(), primary_key=True)
+#    synset_description = Column(String(255))
+#    synset_word_name = Column(String(255), ForeignKey("word.word_name"))
+#    relationship("word")
+#
+#    def as_dict(self):
+#        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 ### ###
+
 
 class Shape(Base):
     __tablename__ = 'shape'
@@ -76,7 +66,6 @@ class Shape(Base):
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
-
 
 class Color(Base):
     __tablename__ = 'color'
@@ -139,13 +128,19 @@ class Flexible(Base):
 class Object(Base):
     __tablename__ = 'object'
     obj_id = Column(Integer(), primary_key=True)
+
+    obj_wordnet_word = Column(String(64), default='')
+    obj_wordnet_synset = Column(Integer(), default = 0)
+    obj_wordnet_type_of_word = Column(String(8), default='n')
+
     obj_real_name = Column(String(255), default='')
     obj_real_description = Column(String(255), default='')
     obj_date_create= Column(DateTime(), default = datetime.datetime.utcnow())
+
     obj_size_length_x = Column(Integer(), default = 0)
     obj_size_width_y = Column(Integer(), default = 0)
     obj_size_height_z = Column(Integer(), default = 0)
-
+    
     obj_shine = Column(String(255), ForeignKey("shine.shn_name"))
     relationship("shine")
 

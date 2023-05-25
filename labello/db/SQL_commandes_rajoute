@@ -1,0 +1,18 @@
+ALTER TABLE object
+DROP COLUMN obj_wordnet_word; 
+
+ALTER TABLE object
+DROP COLUMN obj_wordnet_synset; 
+
+ALTER TABLE object
+DROP COLUMN obj_wordnet_type_of_word; 
+
+
+ALTER TABLE object
+ADD obj_wordnet_word VARCHAR(64) DEFAULT ''; 
+
+ALTER TABLE object
+ADD obj_wordnet_synset INT DEFAULT 0;  
+
+ALTER TABLE object
+ADD obj_wordnet_type_of_word VARCHAR(8) DEFAULT 'n'; 
