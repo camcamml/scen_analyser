@@ -96,10 +96,22 @@ try:
         if len(objects) != 0:
             start_point = (objects[0]['box_xyxy'][0].astype(int), objects[0]['box_xyxy'][1].astype(int))
             end_point = (objects[0]['box_xyxy'][2].astype(int), objects[0]['box_xyxy'][3].astype(int))
-            color_image_with_box = cv2.rectangle(color_image, start_point, end_point, (255,255,0), 2) 
-            cv2.putText(color_image_with_box, objects[0]['name'], (start_point[0], end_point[1]-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36,255,12), 2)
+            center = ((objects[0]['box_cxcywh'][0]*color_image.shape[1]).astype(int), (objects[0]['box_cxcywh'][1]*color_image.shape[0]).astype(int))
+            print(center)
+            dist_obj = round(depth_frame.get_distance(center[0], center[1])*100, 2)
 
-            cxcywh = objects[0]['box_cxcywh']
+            #color_image_with_box = cv2.rectangle(color_image, start_point, end_point, (255,255,0), 2) 
+            color_image_with_circle = cv2.circle(color_image, center, 5, (0,0,255), 2)
+            cv2.putText(color_image_with_circle, objects[0]['name'] + ', ' + str(dist_obj) + " cm", (start_point[0], end_point[1]-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36,255,12), 2)
+
+        # au prof jsp à quoi ça sert
+        #coverage = [0] * 64
+        #for y in range(height):
+        #    for x in range(width):
+        #        dist = depth_frame.get_distance(x, y)
+        #        if 0 < dist and dist < 1:
+        #            coverage[x // 10] += 1
+                    
 
         # Apply colormap on depth image (image must be converted to 8-bit per pixel first)
         depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
@@ -109,7 +121,7 @@ try:
 
         # If depth and color resolutions are different, resize color image to match depth image for display
         if depth_colormap_dim != color_colormap_dim:
-            resized_color_image = cv2.resize(color_image_with_box, dsize=(depth_colormap_dim[1], depth_colormap_dim[0]),
+            resized_color_image = cv2.resize(color_image_with_circle, dsize=(depth_colormap_dim[1], depth_colormap_dim[0]),
                                              interpolation=cv2.INTER_AREA)
             images = np.hstack((resized_color_image, depth_colormap))
         else:
