@@ -38,7 +38,7 @@ class PlateManage:
             return False
         msg = "ROT" + str(steps)
         cls.arduino.write(bytes(msg, 'utf-8'))
-        time.sleep(0.155 * steps + 1)
+        time.sleep(steps / 1200)
         data = cls.arduino.readline().decode("utf-8")[:-2]
         if (data == "ROT" + str(steps)):
             return True

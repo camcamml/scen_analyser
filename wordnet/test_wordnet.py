@@ -21,10 +21,10 @@ def graph_draw(graph):
     matplotlib.pyplot.show()
 
 
-computer = wn.synset('book.n.02')
-test_word = wn.synset('shoe.n.01')
-graph = hyponym_graph(computer)
-print(computer.definition())
+#computer = wn.synset('book.n.02')
+test_word = wn.synset('candle.n.02')
+#graph = hyponym_graph(computer)
+#print(computer.definition())
 print(test_word.definition())
 #graph_draw(graph)
 

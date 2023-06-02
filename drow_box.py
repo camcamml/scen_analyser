@@ -5,7 +5,7 @@ from torchvision.io import read_image
 from torchvision.utils import draw_bounding_boxes
 
 # read input image
-img = read_image('labello/src/cat.jpg')
+img = read_image('object_detection/image_test/bus.jpg')
 
 # bounding box in (xmin, ymin, xmax, ymax) format
 # top-left point=(xmin, ymin), bottom-right point = (xmax, ymax)
@@ -14,6 +14,7 @@ bbox = torch.tensor(bbox, dtype=torch.int)
 print(bbox)
 print(bbox.size())
 bbox = bbox.unsqueeze(0)
+print(bbox)
 print(bbox.size())
 
 # draw bounding box on the input image

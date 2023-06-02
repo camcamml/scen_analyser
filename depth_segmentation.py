@@ -3,13 +3,14 @@ import numpy as np
 import cv2
 import torch
 import time
-
+import os
+import sys
 
 
 import torchvision
 from torchvision.utils import draw_bounding_boxes
 
-names: ['person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 'train', 'truck', 'boat', 'traffic light',
+names = ['person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 'train', 'truck', 'boat', 'traffic light',
         'fire hydrant', 'stop sign', 'parking meter', 'bench', 'bird', 'cat', 'dog', 'horse', 'sheep', 'cow',
         'elephant', 'bear', 'zebra', 'giraffe', 'backpack', 'umbrella', 'handbag', 'tie', 'suitcase', 'frisbee',
         'skis', 'snowboard', 'sports ball', 'kite', 'baseball bat', 'baseball glove', 'skateboard', 'surfboard',
@@ -65,11 +66,11 @@ try:
         dist = depth_frame.get_distance(int(width / 2), int(height / 2))
 
         # Convert images to numpy arrays
-        depth_image = np.asanyarray(depth_frame.get_data())
+        depth_image_nparray = np.asanyarray(depth_frame.get_data())
         color_image = np.asanyarray(color_frame.get_data())
 
         # Apply colormap on depth image (image must be converted to 8-bit per pixel first)
-        depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
+        depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image_nparray, alpha=0.03), cv2.COLORMAP_JET)
 
         depth_colormap_dim = depth_colormap.shape
         color_colormap_dim = color_image.shape
@@ -115,10 +116,9 @@ try:
         coverage = [0] * 64
         for y in range(height):
             for x in range(width):
-                dist = depth_image.get_distance(x, y)
+                dist = depth_frame.get_distance(x, y)
                 if 0 < dist and dist < 1:
                     coverage[x // 10] += 1
-
 
 
 
@@ -131,5 +131,9 @@ try:
 #    print("    %s\n", e.what())
 #    exit(1)
 except Exception as e:
-    print(e)
+    #print(e)
+    exc_type, exc_obj, exc_tb = sys.exc_info()
+    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+    print(exc_type, fname, exc_tb.tb_lineno)
+
     pass

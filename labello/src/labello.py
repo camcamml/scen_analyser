@@ -763,7 +763,7 @@ class GUI:
                     preserve_aspect_ratio=True)
                 graph_image.set_from_pixbuf(pixbuf.copy())
 
-            self.draw_spectro()
+            #self.draw_spectro()
 
 
     def draw_spectro(self):
@@ -877,7 +877,7 @@ class GUI:
         #         dialog.destroy()
         #     return
 
-        steps =      200 / nb_shots_int
+        steps =  13360 / nb_shots_int
         for i in range (nb_shots_int):
             self.start_image_captur(None)
 
@@ -888,7 +888,7 @@ class GUI:
             self.save_current_image(None)
             self.refresh_all_components()
             PlateManage.move_plate_steps(steps)
-            time.sleep(2)
+            time.sleep(0.1)
 
     def export_ply_clicked(self, btn):
         rgb_path = self.parms.get_image_path()
