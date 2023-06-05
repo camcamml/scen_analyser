@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 from ultralytics import YOLO
 import torchvision
 import sys, os
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pyplot as plt
 
 def conv_xyxy_to_cxcywh(image, xyxy):
     center_x = ((xyxy[0] + xyxy[2]) / 2) / image.shape[1]
@@ -14,6 +16,15 @@ def conv_xyxy_to_cxcywh(image, xyxy):
     h = (xyxy[3] - xyxy[1]) / image.shape[0]
     return [center_x, center_y, w, h]
 
+def estimate_w_h(object_image, object_distance, scale_distance=123., scale_size_px=52., scale_size_cm=10.):
+    w = (object_distance / scale_distance) * (scale_size_cm / scale_size_px) * object_image.shape[0]
+    h = (object_distance / scale_distance) * (scale_size_cm / scale_size_px) * object_image.shape[1]
+    return round(w, 2), round(h, 2)
+
+def cut_box_cv2_image(image, box):
+    box = box.astype(int)
+    cropped_image = image[box[0]:box[2], box[1]:box[3]]
+    return cropped_image
 
 try:
     # Create a context object. This object owns the handles to all connected realsense devices
@@ -97,12 +108,19 @@ try:
             start_point = (objects[0]['box_xyxy'][0].astype(int), objects[0]['box_xyxy'][1].astype(int))
             end_point = (objects[0]['box_xyxy'][2].astype(int), objects[0]['box_xyxy'][3].astype(int))
             center = ((objects[0]['box_cxcywh'][0]*color_image.shape[1]).astype(int), (objects[0]['box_cxcywh'][1]*color_image.shape[0]).astype(int))
-            print(center)
-            dist_obj = round(depth_frame.get_distance(center[0], center[1])*100, 2)
+            #print(center)
+            dist_obj_cm = round(depth_frame.get_distance(center[0], center[1])*100, 2)
+            cuted_object = cut_box_cv2_image(color_image, objects[0]['box_xyxy'])
+            print(cuted_object.shape)
+            obj_w_h = estimate_w_h(cuted_object, dist_obj_cm)
+            print(obj_w_h)
 
-            #color_image_with_box = cv2.rectangle(color_image, start_point, end_point, (255,255,0), 2) 
-            color_image_with_circle = cv2.circle(color_image, center, 5, (0,0,255), 2)
-            cv2.putText(color_image_with_circle, objects[0]['name'] + ', ' + str(dist_obj) + " cm", (start_point[0], end_point[1]-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36,255,12), 2)
+            color_image_with_box = cv2.rectangle(color_image, start_point, end_point, (255,255,0), 2) 
+            color_image_with_circle = cv2.circle(color_image_with_box, center, 5, (0,0,255), 2)
+            dimension_string = '' + str(obj_w_h[0]) + '*' + str(obj_w_h[1]) + 'cm, width*height'
+            printed_string = objects[0]['name'] + ', ' + str(dist_obj_cm) + " cm"
+            cv2.putText(color_image_with_circle, printed_string, (start_point[0], end_point[1]-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36,255,12), 2)
+            cv2.putText(color_image_with_circle, dimension_string, (start_point[0], end_point[1]+30), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36,255,12), 2)
 
         # au prof jsp à quoi ça sert
         #coverage = [0] * 64
@@ -110,7 +128,7 @@ try:
         #    for x in range(width):
         #        dist = depth_frame.get_distance(x, y)
         #        if 0 < dist and dist < 1:
-        #            coverage[x // 10] += 1
+        #           coverage[x // 10] += 1
                     
 
         # Apply colormap on depth image (image must be converted to 8-bit per pixel first)
@@ -127,10 +145,11 @@ try:
         else:
             images = np.hstack((color_image, depth_colormap))
 
-        # Show images
-        cv2.namedWindow('RealSense', cv2.WINDOW_AUTOSIZE)
-        cv2.imshow('RealSense', images)
+
+        cv2.namedWindow('RealSence', cv2.WINDOW_AUTOSIZE)
+        cv2.imshow('RealSence', images)
         cv2.waitKey(1)
+
 
     exit(0)
 # except rs.error as e:
